@@ -22,11 +22,10 @@ def perimetr(number_of_sides, accuracy, radius)
   prev = 0
   side = 2 * radius * Math.sin(Math::PI / number_of_sides)
   (1..(1.0 / 0.0)).cycle do
-    unless (now - prev) > accuracy
-      break;
-    end
+    break unless (now - prev) > accuracy
+
     prev = now
-    now = number_of_sides * side;
+    now = number_of_sides * side
     number_of_sides *= 2
     side = length_of_side(side, radius)
   end

@@ -22,21 +22,21 @@ def root(start, stop, check, &function)
 end
 
 def root_setup(start, stop, check, choose_function)
-  if (start.to_s.scan(/\d/).empty? || stop.to_s.scan(/\d/).empty? || check.to_s.scan(/\d/).empty? ||
-         choose_function.to_s.scan(/\d/).empty?)
-  
+  if start.to_s.scan(/\d/).empty? || stop.to_s.scan(/\d/).empty? || check.to_s.scan(/\d/).empty? ||
+     choose_function.to_s.scan(/\d/).empty?
+
     return nil
   end
-  
-  function = if choose_function.to_s.scan(/\d/).join('').to_i == 1
+
+  function = if choose_function.to_s.scan(/\d/).join.to_i == 1
                first_function
              else
                second_function
              end
 
-  start=start.to_s.scan(/\d|[-.]/).join('').to_f
-  stop=stop.to_s.scan(/\d|[-.]/).join('').to_f
-  check=check.to_s.scan(/\d|[-.]/).join('').to_f
-    
+  start = start.to_s.scan(/\d|[-.]/).join.to_f
+  stop = stop.to_s.scan(/\d|[-.]/).join.to_f
+  check = check.to_s.scan(/\d|[-.]/).join.to_f
+
   root(start.to_f, stop.to_f, check, &function)
 end
