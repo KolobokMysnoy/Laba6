@@ -10,9 +10,11 @@ end
 
 def root(start, stop, check, &function)
   centre = (start + stop) / 2
-  result = (start + stop) / 2
-  if (function.call(stop) - function.call(start)).abs > check
-    result = if (function.call(stop) * function.call(centre)).negative?
+  result = centre
+  func_stop = function.call(stop)
+  func_start = function.call(start)
+  if (func_stop - func_start).abs > check
+    result = if (func_stop * function.call(centre)).negative?
                root(centre, stop, check, &function)
              else
                root(start, centre, check, &function)
@@ -22,21 +24,22 @@ def root(start, stop, check, &function)
 end
 
 def root_setup(start, stop, check, choose_function)
-  if start.to_s.scan(/\d/).empty? || stop.to_s.scan(/\d/).empty? || check.to_s.scan(/\d/).empty? ||
-     choose_function.to_s.scan(/\d/).empty?
+  start = start.to_s.scan(/\d|[-.]/)
+  stop = stop.to_s.scan(/\d|[-.]/)
+  check = check.to_s.scan(/\d|[-.]/)
+  choose_function = choose_function.to_s.scan(/\d|[-.]/)
 
-    return nil
-  end
+  return nil if start.empty? || stop.empty? || check.empty? || choose_function.empty?
 
-  function = if choose_function.to_s.scan(/\d/).join.to_i == 1
+  start = start.join.to_f
+  stop = stop.join.to_f
+  check = check.join.to_f
+  choose_function = choose_function.join.to_i
+  function = if choose_function == 1
                first_function
              else
                second_function
              end
 
-  start = start.to_s.scan(/\d|[-.]/).join.to_f
-  stop = stop.to_s.scan(/\d|[-.]/).join.to_f
-  check = check.to_s.scan(/\d|[-.]/).join.to_f
-
-  root(start.to_f, stop.to_f, check, &function)
+  root(start, stop, check, &function)
 end
