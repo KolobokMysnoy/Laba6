@@ -1,31 +1,46 @@
 # frozen_string_literal: true
 
-def standart(radius)
-  2 * Math::PI * radius
-end
+class ClassForPerimetrs
+  private
 
-def length_of_side(previous_length, radius)
-  Math.sqrt((2 * (radius**2)) - (2 * radius * Math.sqrt((radius**2) - ((previous_length**2) / 4))))
-end
+  attr_accessor :number_of_sides, :radius, :radius_two, :accuracy, :side
 
-def search_for_perimetr(radius, accuracy, number_of_sides)
-  return nil if accuracy.to_s.scan(/^\d/).empty? || radius.to_s.scan(/^\d/).empty? || number_of_sides.to_s.scan(/^\d/).empty?
-
-  number_of_sides = number_of_sides.to_f
-  radius = radius.to_f
-  accuracy = accuracy.to_f
-  perimetr(number_of_sides, accuracy, radius)
-end
-
-def perimetr(number_of_sides, accuracy, radius)
-  now = 1
-  prev = 0
-  side = 2 * radius * Math.sin(Math::PI / number_of_sides)
-  while now - prev > accuracy
-    prev = now
-    now = number_of_sides * side
-    number_of_sides *= 2
-    side = length_of_side(side, radius)
+  def length_of_side
+    self.radius_two = radius**2
+    Math.sqrt((2 * radius_two) - (2 * radius * Math.sqrt(radius_two - ((side**2) / 4))))
   end
-  now
+
+  def strings
+    (accuracy.to_s.scan(/^\d/).empty? || radius.to_s.scan(/^\d/).empty? || number_of_sides.to_s.scan(/^\d/).empty?)
+  end
+
+  def perimetr
+    now = 1
+    prev = 0
+    self.side = 2 * radius * Math.sin(Math::PI / number_of_sides)
+
+    while now - prev > accuracy
+      prev = now
+      now = number_of_sides * side
+      self.number_of_sides *= 2
+      self.side = length_of_side
+    end
+    now
+  end
+
+  public
+
+  def search_for_perimetr(radius_out, accuracy_out, number_of_sides_out)
+    self.number_of_sides = number_of_sides_out
+    self.accuracy = accuracy_out
+    self.radius = radius_out
+
+    return nil if strings
+
+    self.number_of_sides = number_of_sides.to_f
+    self.radius = radius.to_f
+    self.accuracy = accuracy.to_f
+
+    perimetr
+  end
 end

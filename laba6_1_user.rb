@@ -14,4 +14,5 @@ accuracy = if indicator == 1
              0.0001
            end
 
-p perimetr(6, accuracy, radius)
+classy = ClassForPerimetrs.new
+p classy.search_for_perimetr(radius, accuracy, 6)

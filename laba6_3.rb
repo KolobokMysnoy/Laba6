@@ -1,45 +1,60 @@
 # frozen_string_literal: true
 
-def first_function
-  ->(x) { (x * x) + Math.sin(x / 2) }
-end
+class ClassForFunction
+  private
 
-def second_function
-  proc { |x| Math.atan(x) + x - 1 }
-end
+  attr_accessor :function, :start, :stop, :check, :centre
 
-def root(start, stop, check, &function)
-  centre = (start + stop) / 2
-  result = centre
-  func_stop = function.call(stop)
-  func_start = function.call(start)
-  if (func_stop - func_start).abs > check
-    result = if (func_stop * function.call(centre)).negative?
-               root(centre, stop, check, &function)
-             else
-               root(start, centre, check, &function)
-             end
+  def function_call(param)
+    function.call(param)
   end
-  result
-end
 
-def root_setup(start, stop, check, choose_function)
-  start = start.to_s.scan(/\d|[-.]/)
-  stop = stop.to_s.scan(/\d|[-.]/)
-  check = check.to_s.scan(/\d|[-.]/)
-  choose_function = choose_function.to_s.scan(/\d|[-.]/)
+  def ramification
+    if (function_call(stop) * function_call(centre)).negative?
+      self.start = centre
+    else
+      self.stop = centre
+    end
+    root
+  end
 
-  return nil if start.empty? || stop.empty? || check.empty? || choose_function.empty?
+  def root
+    self.centre = (start + stop).to_f / 2
+    result = centre
+    func_stop = function_call(stop)
+    func_start = function_call(start)
 
-  start = start.join.to_f
-  stop = stop.join.to_f
-  check = check.join.to_f
-  choose_function = choose_function.join.to_i
-  function = if choose_function == 1
-               first_function
-             else
-               second_function
-             end
+    result = ramification if (func_stop - func_start).abs > check
 
-  root(start, stop, check, &function)
+    result
+  end
+
+  def setup
+    self.start = start.join.to_f
+    self.stop = stop.join.to_f
+    self.check = check.join.to_f
+  end
+
+  def scans
+    self.start = start.to_s.scan(/\d|[-.]/)
+    self.stop = stop.to_s.scan(/\d|[-.]/)
+    self.check = check.to_s.scan(/\d|[-.]/)
+  end
+
+  public
+
+  def init_function(func)
+    self.function = func
+  end
+
+  def root_setup(start_out, stop_out, check_out)
+    self.start = start_out
+    self.stop = stop_out
+    self.check = check_out
+    scans
+    return nil if start.empty? || stop.empty? || check.empty?
+
+    setup
+    root
+  end
 end
