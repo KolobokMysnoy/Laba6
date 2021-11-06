@@ -43,7 +43,7 @@ class ClassForFunction
 
   public
 
-  def init_function(func)
+  def init_function(&func)
     self.function = func
   end
 
