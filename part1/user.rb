@@ -1,9 +1,15 @@
 # frozen_string_literal: true
 
-require './laba6_1'
+require './part1/main.rb'
+
+def check_radius(radius)
+  Float(radius)
+rescue StandardError
+  nil
+end
 
 p 'Input your radius'
-radius = gets.to_f
+radius = check_radius(gets)
 puts 'Choose your accuracy'
 puts '1: 0.001'
 puts '2: 0.0001'
@@ -14,5 +20,8 @@ accuracy = if indicator == 1
              0.0001
            end
 
-classy = ClassForPerimetrs.new
-p classy.search_for_perimetr(radius, accuracy, 6)
+if radius
+  p ComputePerimeter.execute(radius, accuracy, 6)
+else
+  p 'Incorrect input'
+end
